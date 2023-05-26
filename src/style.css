@@ -1,0 +1,301 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  font-family: 'Sarabun', sans-serif;
+  letter-spacing: 0.03rem;
+}
+
+#page {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1.5fr 4fr;
+}
+
+nav {
+  background-color: #3a3a3a;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 8px;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+}
+
+main {
+  background-color: #2c2c2c;
+}
+
+nav,
+main {
+  padding: 12px 20px;
+}
+
+li {
+  list-style: none;
+}
+
+h1 {
+  font-weight: 600;
+  margin-bottom: 12px;
+  font-size: 2.25rem;
+}
+
+li,
+h1,
+label {
+  color: #e0e1dd;
+}
+
+.project-cont {
+  display: flex;
+  flex-direction: column;
+}
+
+.project-cont .title {
+  font-size: 1.25rem;
+  padding: 8px;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.project-cont .title.current {
+  background-color: #2c2c2c;
+  border-radius: 6px;
+}
+
+.todos-cont {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.todo-card {
+  padding: 8px 16px;
+  border-radius: 6px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  background-color: #1d1d1d;
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+.todo-card .title {
+  font-size: 1.45rem;
+  font-weight: 600;
+}
+
+.todo-card .title.complete {
+  text-decoration: line-through;
+  color: #a0a0a0;
+}
+
+.desc,
+.date {
+  font-size: 1.1rem;
+}
+
+.desc {
+  padding-top: 8px;
+}
+
+.date {
+  padding-bottom: 8px;
+}
+
+.todo-btns,
+.project-cont .title {
+  position: relative;
+}
+
+button {
+  cursor: pointer;
+}
+
+.project-cont .title button,
+.todo-btns button,
+.form-cont .delete {
+  background-color: transparent;
+  border: 0;
+}
+
+.todo-btns {
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.view img,
+.complete img,
+.important img {
+  filter: invert(72%) sepia(0%) saturate(35%) hue-rotate(145deg) brightness(89%)
+    contrast(89%);
+}
+.view img {
+  width: 24px;
+  height: 24px;
+}
+
+.view img:hover {
+  filter: invert(67%) sepia(61%) saturate(390%) hue-rotate(178deg)
+    brightness(106%) contrast(101%);
+}
+
+.view.highlight img {
+  filter: invert(49%) sepia(58%) saturate(904%) hue-rotate(166deg)
+    brightness(83%) contrast(99%);
+}
+
+.complete img,
+.important img {
+  width: 20px;
+  height: 20px;
+}
+
+.complete img:hover {
+  filter: invert(81%) sepia(37%) saturate(435%) hue-rotate(66deg)
+    brightness(90%) contrast(86%);
+}
+
+.complete.highlight img {
+  filter: invert(42%) sepia(39%) saturate(568%) hue-rotate(71deg)
+    brightness(102%) contrast(89%);
+}
+
+.important img:hover {
+  filter: invert(75%) sepia(62%) saturate(2353%) hue-rotate(307deg)
+    brightness(91%) contrast(72%);
+}
+
+.important.highlight img {
+  filter: invert(13%) sepia(87%) saturate(3059%) hue-rotate(348deg)
+    brightness(115%) contrast(84%);
+}
+
+.delete {
+  color: #a0a0a0;
+  padding: 6px;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.delete {
+  position: absolute;
+}
+
+.project-cont .title .delete,
+.form-cont .delete {
+  top: -15px;
+  right: -10px;
+}
+
+.todo-btns .delete {
+  top: -28px;
+  right: -26px;
+}
+
+.delete:hover {
+  color: #760000;
+}
+
+.create-project,
+.create-todo {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 0;
+  font-weight: 600;
+  color: #e0e1dd;
+  font-size: 1rem;
+}
+
+.create-project {
+  background-color: #178bd3;
+  margin-bottom: 10px;
+}
+
+.create-project:active {
+  background-color: #3ca7e9;
+}
+
+.create-todo {
+  background-color: #488a48;
+}
+
+.create-todo:active {
+  background-color: #57a557;
+}
+
+.hidden {
+  display: none;
+}
+
+.blur {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-cont {
+  background-color: #3a3a3a;
+  padding: 40px;
+  border-radius: 6px;
+  position: fixed;
+  top: 25%;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.form-cont h1 {
+  text-align: center;
+  font-size: 1.75rem;
+}
+
+form div:not(:nth-of-type(4)) {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+label {
+  font-size: 1.25rem;
+}
+
+label:last-of-type {
+  margin-right: 6px;
+}
+
+input {
+  font-family: inherit;
+  font-size: 1.1rem;
+  padding: 6px 6px;
+  border: 0;
+  border-radius: 6px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+input:focus {
+  outline: solid 2px #178bd3;
+  border: 0;
+}
+
+form .create-todo {
+  width: 100%;
+  margin-top: 10px;
+}
+
+form .create-project {
+  width: 100%;
+  margin-top: 10px;
+}
