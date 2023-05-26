@@ -1,11 +1,7 @@
 import Project from './project';
 
 class TodoList {
-  #projectsArr = [];
-
-  get projects() {
-    return this.#projectsArr;
-  }
+  projects = [];
 
   createDefaultProjects() {
     this.addProject('Personal');
@@ -13,27 +9,27 @@ class TodoList {
   }
 
   addProject(title) {
-    this.#projectsArr.push(new Project(title));
+    this.projects.push(new Project(title));
   }
 
   deleteProject(index) {
-    this.#projectsArr.splice(index, 1);
+    this.projects.splice(index, 1);
   }
 
   getProject(index) {
-    return this.#projectsArr.at(index);
+    return this.projects.at(index);
   }
 
   getCurrentProject() {
-    return this.#projectsArr.find(obj => obj.current === true);
+    return this.projects.find(obj => obj.isCurrent === true);
   }
 
   setCurrentProject(index) {
-    this.getProject(index).current = true;
+    this.getProject(index).isCurrent = true;
   }
 
   removeCurrentProject() {
-    this.getCurrentProject().current = false;
+    this.getCurrentProject().isCurrent = false;
   }
 }
 

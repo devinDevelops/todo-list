@@ -1,18 +1,11 @@
 export default class Todo {
-  #isImportant = false;
+  isCompleted = false;
 
-  constructor(title, desc, date) {
+  constructor(title, desc, date, isImportant = false) {
     this.title = title;
     this.desc = desc;
     this.date = date;
-  }
-
-  get isImportant() {
-    return this.#isImportant;
-  }
-
-  set isImportant(bool) {
-    this.#isImportant = bool;
+    this.isImportant = isImportant;
   }
 
   editTodo(key, value) {
