@@ -1,9 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo List</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1"><script defer src="bundle.js"></script></head>
+  <script defer src="runtime.bundle.js"></script><script defer src="index.bundle.js"></script></head>
   <body>
+    <div id="page">
+      <nav>
+        <h1>Projects</h1>
+        <ul class="projects-cont"></ul>
+        <button class="create-project">New Project</button>
+        <button class="create-todo">New Todo</button>
+      </nav>
+      <main>
+        <h1 class="todos-header"></h1>
+        <div class="todos-cont"></div>
+      </main>
+      <div id="project-form" class="hidden">
+        <div class="form-cont">
+          <button class="delete">X</button>
+          <h1>New Project</h1>
+          <form>
+            <div>
+              <label for="project-title">Title</label
+              ><input type="text" id="project-title" />
+            </div>
+            <button class="create-project" type="button">Add Project</button>
+          </form>
+        </div>
+      </div>
+      <div id="todo-form" class="hidden">
+        <div class="form-cont">
+          <button class="delete">X</button>
+          <h1>New Todo</h1>
+          <form>
+            <div>
+              <label for="todo-title">Title</label
+              ><input type="text" id="todo-title" />
+            </div>
+            <div>
+              <label for="todo-desc">Description</label
+              ><input type="text" id="todo-desc" />
+            </div>
+            <div>
+              <label for="todo-date">Due Date</label
+              ><input type="date" id="todo-date" />
+            </div>
+            <div>
+              <label for="important">Important?</label
+              ><input type="checkbox" id="important" />
+            </div>
+            <button class="create-todo" type="button">Add Todo</button>
+          </form>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
