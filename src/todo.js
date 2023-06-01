@@ -7,8 +7,4 @@ export default class Todo {
     this.date = date;
     this.isImportant = isImportant;
   }
-
-  editTodo(key, value) {
-    this[key] = value;
-  }
 }

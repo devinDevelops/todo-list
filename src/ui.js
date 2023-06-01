@@ -1,4 +1,5 @@
 import DOMPurify from 'dompurify';
+import { format } from 'date-fns';
 
 import viewIMG from './icons/view.png';
 import completeIMG from './icons/complete.png';
@@ -341,7 +342,12 @@ function submitTodoHandler() {
   const date = getInputValue('todo-date');
   const importantBool = getInputValue('important', 'checked');
 
-  getCurrentProject().addTodo(title, desc, date, importantBool);
+  const formattedDate = format(
+    new Date(date.split('-').join('/')),
+    'MM/dd/yyyy'
+  );
+
+  getCurrentProject().addTodo(title, desc, formattedDate, importantBool);
   const todo = getCurrentProject().getTodo(-1);
   const i = getCurrentProject().todos.indexOf(todo);
   const todoEl = createTodoEl(todo, i);
