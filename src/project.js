@@ -13,8 +13,8 @@ export default class Project {
     return this.todos.at(index);
   }
 
-  addTodo(title, desc, date) {
-    this.todos.push(new Todo(title, desc, date));
+  addTodo(title, desc, date, importantBool = false) {
+    this.todos.push(new Todo(title, desc, date, importantBool));
   }
 
   deleteTodo(index) {
