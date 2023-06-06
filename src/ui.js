@@ -1,34 +1,24 @@
 import DOMPurify from 'dompurify';
-import { format } from 'date-fns';
 
 import viewIMG from './icons/view.png';
 import completeIMG from './icons/complete.png';
 import importantIMG from './icons/important.png';
 
 import TodoList from './todoList';
+import { updateLS } from './localStorage';
 
-const {
-  createDefaultProjects,
-  createDefaultTodos,
-  getCurrentProject,
-  addProject,
-  deleteProject,
-  removeCurrentProject,
-  setCurrentProject,
-  getProject,
-} = TodoList;
+export const todoList = new TodoList();
 
 const projectsContEl = document.querySelector('.projects-cont');
 const todosContEl = document.querySelector('.todos-cont');
 const submitProjectBtn = document.querySelector('form .create-project');
 const submitTodoBtn = document.querySelector('form .create-todo');
 
-export default function initiateTodoList() {
+export function initiateTodoListListeners() {
   addFormDisplayListeners('project');
   addFormDisplayListeners('todo');
   submitTodoBtn.addEventListener('click', submitTodoHandler);
   submitProjectBtn.addEventListener('click', submitProjectHandler);
-  addDefaultProjects();
 }
 
 // ***** UTILITY *****
@@ -65,6 +55,7 @@ function addImportantBtnListener() {
     const todoIndex = todoCard.getAttribute('data-todo-index');
     setTodoBool('isImportant', todoIndex);
     importantBtn.classList.toggle('highlight');
+    updateLS();
   });
 }
 
@@ -79,6 +70,7 @@ function addCompleteBtnListener() {
     setTodoBool('isCompleted', todoIndex);
     todoTitle.classList.toggle('complete');
     completeBtn.classList.toggle('highlight');
+    updateLS();
   });
 }
 
@@ -104,8 +96,9 @@ function addDeleteTodoBtnListener() {
     const todoCard = getTodoCard(deleteTodoBtn);
     const todoIndex = todoCard.getAttribute('data-todo-index');
 
-    getCurrentProject().deleteTodo(todoIndex); // delete the todo obj
+    todoList.getCurrentProject().deleteTodo(todoIndex); // delete the todo obj
     renderTodoEls(); // re-render the remaining todo objs
+    updateLS();
   });
 }
 
@@ -128,7 +121,7 @@ const doesTodoBtnGetHighlight = (bool, btn) => {
 const getTodoBool = (todo, prop) => todo[prop];
 
 function setTodoBool(prop, todoIndex) {
-  const currTodo = getCurrentProject().todos[todoIndex];
+  const currTodo = todoList.getCurrentProject().todos[todoIndex];
   const currBoolValue = getTodoBool(currTodo, prop);
   const newBoolValue = (currTodo[prop] = !currBoolValue);
 
@@ -182,9 +175,9 @@ function createTodoEl(todo, i) {
 function renderTodoEls() {
   deleteChildEls(todosContEl);
 
-  if (getCurrentProject().todos.length === 0) return;
+  if (todoList.getCurrentProject().todos.length === 0) return;
 
-  getCurrentProject().todos.forEach((todo, i) => {
+  todoList.getCurrentProject().todos.forEach((todo, i) => {
     const todoEl = createTodoEl(todo, i);
     todosContEl.appendChild(todoEl);
     addTodoBtnsListeners();
@@ -208,22 +201,23 @@ function createProjectEl(project, i) {
   return projectEl;
 }
 
-function addDefaultProjects() {
-  createDefaultProjects();
-  createDefaultTodos();
+export function addDefaultProjects() {
+  todoList.createDefaultProjects();
+  todoList.createDefaultTodos();
   renderProjectEls();
+  updateLS();
 }
 
-function renderProjectEls() {
+export function renderProjectEls() {
   deleteChildEls(projectsContEl);
 
-  if (TodoList.projects.length === 0) {
+  if (todoList.projects.length === 0) {
     deleteChildEls(todosContEl);
     setTodosHeader('');
     return;
   }
 
-  TodoList.projects.forEach((project, i) => {
+  todoList.projects.forEach((project, i) => {
     const projectEl = createProjectEl(project, i);
     projectsContEl.appendChild(projectEl);
     addDeleteProjectBtnListener();
@@ -231,7 +225,7 @@ function renderProjectEls() {
 
     // the first project and it's todos is the one that gets displayed on render call
     if (i === 0) {
-      setCurrentProject(project);
+      todoList.setCurrentProject(i);
       addCurrentClass(projectEl);
       setTodosHeader(project.title);
       renderTodoEls();
@@ -253,13 +247,13 @@ function switchProjectListener(projectEl) {
   projectEl.addEventListener('click', () => {
     const projectIndex = projectEl.getAttribute('data-project-index');
 
-    if (getProject(projectIndex) === undefined) return; // if the project is deleted, exit
+    if (todoList.getProject(projectIndex) === undefined) return; // if the project is deleted, exit
 
-    removeCurrentProject();
-    setCurrentProject(projectIndex);
+    todoList.removeCurrentProject();
+    todoList.setCurrentProject(projectIndex);
     removeCurrentClass();
     addCurrentClass(projectEl);
-    setTodosHeader(getCurrentProject().title);
+    setTodosHeader(todoList.getCurrentProject().title);
     renderTodoEls();
   });
 }
@@ -271,8 +265,9 @@ function addDeleteProjectBtnListener() {
   deleteProjectBtn.addEventListener('click', e => {
     const projectEl = e.target.parentNode;
     const projectIndex = projectEl.getAttribute('data-project-index');
-    deleteProject(projectIndex);
+    todoList.deleteProject(projectIndex);
     renderProjectEls();
+    updateLS();
   });
 }
 
@@ -311,16 +306,16 @@ function clearInputValues() {
 function submitProjectHandler() {
   const title = getInputValue('project-title');
 
-  addProject(title);
-  const project = getProject(-1);
-  const i = TodoList.projects.indexOf(project);
+  todoList.addProject(title);
+  const project = todoList.getProject(-1);
+  const i = todoList.projects.indexOf(project);
 
-  if (getCurrentProject() !== undefined) {
-    removeCurrentProject();
+  if (todoList.getCurrentProject() !== undefined) {
+    todoList.removeCurrentProject();
     removeCurrentClass();
   }
 
-  setCurrentProject(i);
+  todoList.setCurrentProject(i);
   const projectEl = createProjectEl(project, i);
   projectsContEl.appendChild(projectEl);
   addDeleteProjectBtnListener();
@@ -332,27 +327,24 @@ function submitProjectHandler() {
   renderTodoEls();
 
   clearInputValues();
+  updateLS();
 }
 
 function submitTodoHandler() {
-  if (getCurrentProject() === undefined) return;
+  if (todoList.getCurrentProject() === undefined) return;
 
   const title = getInputValue('todo-title');
   const desc = getInputValue('todo-desc');
   const date = getInputValue('todo-date');
   const importantBool = getInputValue('important', 'checked');
 
-  const formattedDate = format(
-    new Date(date.split('-').join('/')),
-    'MM/dd/yyyy'
-  );
-
-  getCurrentProject().addTodo(title, desc, formattedDate, importantBool);
-  const todo = getCurrentProject().getTodo(-1);
-  const i = getCurrentProject().todos.indexOf(todo);
+  todoList.getCurrentProject().addTodo(title, desc, date, importantBool);
+  const todo = todoList.getCurrentProject().getTodo(-1);
+  const i = todoList.getCurrentProject().todos.indexOf(todo);
   const todoEl = createTodoEl(todo, i);
   todosContEl.appendChild(todoEl);
   addTodoBtnsListeners();
   isImportantHighlighted(todo);
   clearInputValues();
+  updateLS();
 }

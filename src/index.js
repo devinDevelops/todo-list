@@ -1,5 +1,17 @@
 import './style.css';
 
-import initiateTodoList from './ui';
+import { renderLS, initiateLS } from './localStorage';
+import { initiateTodoListListeners, addDefaultProjects } from './ui';
 
-window.addEventListener('DOMContentLoaded', initiateTodoList);
+addEventListener('DOMContentLoaded', () => {
+  const emptyLocalStorage = localStorage.length === 0;
+
+  if (emptyLocalStorage) {
+    addDefaultProjects();
+    initiateTodoListListeners();
+    initiateLS();
+  } else {
+    renderLS();
+    initiateTodoListListeners();
+  }
+});
